@@ -1,11 +1,11 @@
-package com.bme.mdt72t.nytimesarticles;
+package com.bme.mdt72t.nytimesarticles.model;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 
-class ArticlePOJO {
+public class ArticlesPOJO {
 
     @SerializedName("results")
     private List<Result> results;

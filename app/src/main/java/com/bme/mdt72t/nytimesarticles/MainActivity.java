@@ -6,6 +6,9 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bme.mdt72t.nytimesarticles.model.ArticlesPOJO;
+import com.bme.mdt72t.nytimesarticles.network.NYTimesArticleService;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -38,12 +41,12 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         NYTimesArticleService service = retrofit.create(NYTimesArticleService.class);
-        Call<ArticlePOJO> call = service.loadCards("all-sections", "7");
-        call.enqueue(new Callback<ArticlePOJO>() {
+        Call<ArticlesPOJO> call = service.loadCards("all-sections", "7");
+        call.enqueue(new Callback<ArticlesPOJO>() {
 
             @Override
-            public void onResponse(Call<ArticlePOJO> call, Response<ArticlePOJO> response) {
-                ArticlePOJO articlePOJO = response.body();
+            public void onResponse(Call<ArticlesPOJO> call, Response<ArticlesPOJO> response) {
+                ArticlesPOJO articlePOJO = response.body();
 
                 textView.setText("num_result: " + articlePOJO.getNum_results() + "\r\n"
                         + "copyright: " + articlePOJO.getCopyright() + "\r\n"
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ArticlePOJO> call, Throwable t) {
+            public void onFailure(Call<ArticlesPOJO> call, Throwable t) {
                 Log.e(TAG, t.getMessage());
                 Toast.makeText(getApplicationContext(),
                         "Error during query!", Toast.LENGTH_LONG).show();

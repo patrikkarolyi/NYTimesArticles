@@ -1,9 +1,9 @@
-package com.bme.mdt72t.nytimesarticles;
+package com.bme.mdt72t.nytimesarticles.model;
 
 
 import com.google.gson.annotations.SerializedName;
 
-class Result {
+public class Result {
     @SerializedName("abstract")
     private String mAbstract;
 

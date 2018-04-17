@@ -1,4 +1,8 @@
-package com.bme.mdt72t.nytimesarticles;
+package com.bme.mdt72t.nytimesarticles.network;
+
+
+
+import com.bme.mdt72t.nytimesarticles.model.ArticlesPOJO;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -13,7 +17,7 @@ public interface NYTimesArticleService {
     //period = [1,7,30]
 
     @GET("{Section}/{Period}.json?api-key=" + ApiKey)
-    Call<ArticlePOJO> loadCards(@Path("Section") String section,
-                                @Path("Period") String period);
+    Call<ArticlesPOJO> loadCards(@Path("Section") String section,
+                                 @Path("Period") String period);
 
 }
