@@ -1,5 +1,6 @@
 package com.bme.mdt72t.nytimesarticles.adapter;
 
+import android.animation.ObjectAnimator;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bme.mdt72t.nytimesarticles.MyUtils;
 import com.bme.mdt72t.nytimesarticles.R;
 import com.bme.mdt72t.nytimesarticles.model.ArticlesPOJO;
 import com.bme.mdt72t.nytimesarticles.model.Result;
@@ -24,6 +26,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     private Context context;
     private ArticlesPOJO articlesPOJO;
+    private boolean internetIsAvailable;
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView title;
@@ -44,6 +47,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     public ArticleAdapter(ArticlesPOJO articlesPOJO, Context context) {
         this.articlesPOJO = articlesPOJO;
         this.context = context;
+        internetIsAvailable = MyUtils.isInternetAvailable(context);
     }
 
     @NonNull
@@ -59,8 +63,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ArticleAdapter.ViewHolder holder, int position) {
         final Result currentResult = articlesPOJO.getResults().get(position);
-
-        holder.title.setText(currentResult.getTitle());
+        String title = currentResult.getTitle();
+        if(title.length()<50)title += "                                                             ";
+        holder.title.setText(title);
         holder.byLine.setText(currentResult.getByline() + "  " +currentResult.getPublished_date());
         Picasso.get().load(getThumbnail(currentResult))
                 .error(R.mipmap.ic_launcher_round)
@@ -69,17 +74,24 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         holder.nextSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    Intent i = new Intent("android.intent.action.MAIN");
-                    i.setComponent(ComponentName.unflattenFromString("com.android.chrome/com.android.chrome.Main"));
-                    i.addCategory("android.intent.category.LAUNCHER");
-                    i.setData(Uri.parse(currentResult.getUrl()));
-                    context.startActivity(i);
-                } catch (ActivityNotFoundException e) {
-                    // Chrome is not installed
-                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(currentResult.getUrl()));
-                    context.startActivity(i);
+                if(internetIsAvailable){
+                    try {
+                        Intent i = new Intent("android.intent.action.MAIN");
+                        i.setComponent(ComponentName.unflattenFromString("com.android.chrome/com.android.chrome.Main"));
+                        i.addCategory("android.intent.category.LAUNCHER");
+                        i.setData(Uri.parse(currentResult.getUrl()));
+                        context.startActivity(i);
+                    } catch (ActivityNotFoundException e) {
+                        // Chrome is not installed
+                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(currentResult.getUrl()));
+                        context.startActivity(i);
+                    }
                 }
+                else
+                    ObjectAnimator
+                            .ofFloat(v, "translationX", 0, 25, -25, 25, -25,15, -15, 6, -6, 0)
+                            .setDuration(3000)
+                            .start();
             }
         });
 

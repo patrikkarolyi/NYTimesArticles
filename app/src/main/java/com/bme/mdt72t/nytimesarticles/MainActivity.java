@@ -3,6 +3,7 @@ package com.bme.mdt72t.nytimesarticles;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,27 +26,51 @@ public class MainActivity extends AppCompatActivity implements ArticleAsker {
     @BindView(R.id.main_recyclerview)
     RecyclerView recyclerView;
 
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+
     @BindView(R.id.main_coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
+
+    Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        initRecyclerView();
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                getArticlesFromInternet();
+            }
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getArticlesFromInternet();
+        initRecyclerView();
     }
 
     private void getArticlesFromInternet(){
-        if(MyUtils.isInternetAvailable(this))
+        if(MyUtils.isInternetAvailable(this)){
             new GetArticlesAPI().getArticle(this);
+            if(snackbar!=null)
+            snackbar.dismiss();
+        }
         else{
-            Snackbar snackbar = Snackbar
+            swipeRefreshLayout.setRefreshing(false);
+            snackbar = Snackbar
                     .make(coordinatorLayout, "No internet connection!", Snackbar.LENGTH_INDEFINITE)
                     .setAction("RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            // Retry to connect
                             getArticlesFromInternet();
                         }
                     });
@@ -72,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements ArticleAsker {
     @Override
     public void giveArticles(ArticlesPOJO articlesPOJO) {
         recyclerView.setAdapter(new ArticleAdapter(articlesPOJO,this));
-        Toast.makeText(this,"Articles updated!",Toast.LENGTH_SHORT);
+        Toast.makeText(this,"Articles updated!",Toast.LENGTH_SHORT).show();
         MyUtils.setLastArticles(articlesPOJO,this);
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

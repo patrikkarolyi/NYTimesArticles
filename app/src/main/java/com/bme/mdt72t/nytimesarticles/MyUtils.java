@@ -13,7 +13,7 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
-class MyUtils {
+public class MyUtils {
     public static boolean checkFirstRun(Context context) {
         boolean isFirstRun = context.getSharedPreferences("run", MODE_PRIVATE)
                 .getBoolean("isFirstRun", true);
