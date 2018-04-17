@@ -8,7 +8,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-public interface NYTimesArticleService {
+public interface NYTimesArticleAPI {
 
     String BASE_URL = "http://api.nytimes.com/svc/mostpopular/v2/mostviewed/";
     String ApiKey = "b57a5a5f1d79412fa7ff73bcf5b555c7";
