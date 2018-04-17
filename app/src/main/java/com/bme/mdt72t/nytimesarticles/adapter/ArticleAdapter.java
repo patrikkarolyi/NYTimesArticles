@@ -61,8 +61,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         final Result currentResult = articlesPOJO.getResults().get(position);
 
         holder.title.setText(currentResult.getTitle());
-        holder.byLine.setText(currentResult.getByline());
-        Picasso.get().load(getThumbnail(currentResult)).into(holder.cirlceImage);
+        holder.byLine.setText(currentResult.getByline() + "  " +currentResult.getPublished_date());
+        Picasso.get().load(getThumbnail(currentResult))
+                .error(R.mipmap.ic_launcher_round)
+                .into(holder.cirlceImage);
 
         holder.nextSign.setOnClickListener(new View.OnClickListener() {
             @Override

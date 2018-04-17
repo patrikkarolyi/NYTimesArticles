@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="main_default_padding">6dp</dimen>
+    <dimen name="main_default_margin">6dp</dimen>
     <dimen name="article_text_gap">16dp</dimen>
     <dimen name="item_img_size">100dp</dimen>
     <dimen name="item_img_margin">6dp</dimen>
