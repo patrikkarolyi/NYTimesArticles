@@ -29,6 +29,7 @@
             android:textSize="@dimen/normal_font_size"
             android:textStyle="bold"
             android:ellipsize="end"
+            android:textColor="@color/black"
             android:maxLines="3"
             android:layout_marginBottom="@dimen/article_text_gap"
             />
