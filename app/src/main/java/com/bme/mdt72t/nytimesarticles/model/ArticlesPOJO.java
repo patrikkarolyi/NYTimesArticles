@@ -2,6 +2,7 @@ package com.bme.mdt72t.nytimesarticles.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 

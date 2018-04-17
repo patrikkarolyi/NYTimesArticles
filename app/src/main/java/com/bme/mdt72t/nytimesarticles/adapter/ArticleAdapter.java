@@ -60,11 +60,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     public void onBindViewHolder(@NonNull ArticleAdapter.ViewHolder holder, int position) {
         final Result currentResult = articlesPOJO.getResults().get(position);
 
-        String url = "https://static01.nyt.com/images/2018/04/14/world/14syriaattack-span/14syriaattack-span-square320.jpg";
-
         holder.title.setText(currentResult.getTitle());
-        holder.byLine.setText(currentResult.getByline());
-        Picasso.get().load(url).into(holder.cirlceImage);
+        holder.byLine.setText(currentResult.getByline() + "  " +currentResult.getPublished_date());
+        Picasso.get().load(getThumbnail(currentResult))
+                .error(R.mipmap.ic_launcher_round)
+                .into(holder.cirlceImage);
 
         holder.nextSign.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +83,17 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             }
         });
 
+    }
+
+    private String getThumbnail(Result currentResult) {
+       String url = null;
+        if(currentResult.getMediaList() != null)
+            if(currentResult.getMediaList().get(0).getMetadata() != null)
+                if(currentResult.getMediaList().get(0).getMetadata().get(0).getUrl() != null)
+                    url = currentResult.getMediaList().get(0).getMetadata().get(0).getUrl();
+        if(url == null)
+            url = "https://static01.nyt.com/images/2018/04/14/world/14syriaattack-span/14syriaattack-span-square320.jpg";
+        return url;
     }
 
     @Override
