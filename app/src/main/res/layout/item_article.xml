@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_hei"
+    android:weightSum="10">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img"
+        android:layout_gravity="center"
+        android:layout_weight="2"
+        android:layout_width="@dimen/item_img_size"
+        android:layout_height="@dimen/item_img_size"
+        android:layout_margin="@dimen/item_img_margin"
+        android:src="@mipmap/ic_launcher_round" />
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_weight="7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/lorem"
+            android:textSize="@dimen/normal_font_size"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:layout_marginBottom="@dimen/article_text_gap"
+            />
+
+        <TextView
+            android:id="@+id/byline"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/normal_font_size"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="@string/lorem"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/nextsign"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:layout_width="@dimen/item_nextsign_size"
+        android:layout_height="@dimen/item_nextsign_size"
+        android:src="@drawable/ic_chevron_right"/>
+
+</LinearLayout>
