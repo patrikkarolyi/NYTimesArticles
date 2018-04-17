@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">NYTimesArticles</string>
+    <string name="NY_Times_most_popular">NY Times most popular</string>
+    <string name="main_search">Search</string>
+</resources>
