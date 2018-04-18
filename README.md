@@ -1,10 +1,10 @@
 # NYTimesArticles
 
 ## Implementálás:
-A feladatot igyekeztem részenként megoldani, és az egész kicsivel kevesebb mint az elvárt időt vette igénybe. Rögtön a retrofit használatával kezdtem és a model package-ban lévő POJO osztályok kialakításával. A későbbi feature-öknek nagyvonalakban csináltam külön brach-eket. A bracnh-ek neve egy esetben nem fedi a tartalmat, mert amit room adat kezelővel terveztem megoldani a 'room' bracnh-ben, azt később egy egyszerű gson+sharedpreferences-szel jóval egyszerűbben, és áttekinthetőbben sikerült megvalósítani. A UI szerintem ügyel a felhasználói élmény biztosítására. A projekt során nem használtam olyan technológiát amit ne ismertem volna korábbról, csupán az MVP architektúra jelentett részben újdonságot. A dummy adat összerakásán kívűl egy sor kódban írtam olyat, ami nem feltétlen val jóízlésre, de ennek megtalálását az olvasóra bízom. :shipit:
+A feladatot igyekeztem részenként megoldani, és az egész kicsivel kevesebb mint az elvárt időt vette igénybe. Rögtön a retrofit használatával kezdtem és a model package-ban lévő POJO osztályok kialakításával. A későbbi feature-öknek nagyvonalakban csináltam külön brach-eket. A bracnh-ek neve egy esetben nem fedi a tartalmat, mert amit room adat kezelővel terveztem megoldani a 'room' bracnh-ben, azt később egy egyszerű gson+sharedpreferences-szel jóval egyszerűbben, és áttekinthetőbben sikerült megvalósítani. A UI szerintem ügyel a felhasználói élmény biztosítására. A projekt során nem használtam olyan technológiát amit ne ismertem volna korábbról, csupán az MVP architektúra jelentett részben újdonságot. A dummy adat összerakásán kívűl egy sor kódban írtam olyat, ami nem feltétlen val jóízlésre, de ennek megtalálását az olvasóra bízom.
 
 
-### Használt libek:
+## Használt libek:
 
 #### Körképek megjelenítésére:
 -picasso
