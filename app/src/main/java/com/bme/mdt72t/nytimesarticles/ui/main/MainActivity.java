@@ -1,5 +1,6 @@
-package com.bme.mdt72t.nytimesarticles;
+package com.bme.mdt72t.nytimesarticles.ui.main;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -10,36 +11,37 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
-import com.bme.mdt72t.nytimesarticles.adapter.ArticleAdapter;
+import com.bme.mdt72t.nytimesarticles.R;
 import com.bme.mdt72t.nytimesarticles.model.ArticlesPOJO;
-import com.bme.mdt72t.nytimesarticles.network.ArticleAsker;
-import com.bme.mdt72t.nytimesarticles.network.GetArticlesAPI;
+import com.bme.mdt72t.nytimesarticles.ui.adapter.ArticleAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements ArticleAsker {
+public class MainActivity extends AppCompatActivity implements MainScreen {
 
     private static final String TAG = "MainActivity";
+    private static Context context;
+    private MainPresenter mainPresenter;
 
-    //UI vars
+    // UI vars
     @BindView(R.id.main_recyclerview)
     RecyclerView recyclerView;
-
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-
     @BindView(R.id.main_coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
-
     Snackbar snackbar;
 
+
+    // ONCREATE
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        context = this;
+        mainPresenter = MainPresenter.getInstance();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -47,30 +49,38 @@ public class MainActivity extends AppCompatActivity implements ArticleAsker {
                 getArticlesFromInternet();
             }
         });
-
     }
 
+    // ONSTART
     @Override
-    protected void onResume() {
-        super.onResume();
-        getArticlesFromInternet();
+    protected void onStart() {
+        super.onStart();
+        MainPresenter.getInstance().attachScreen(this);
         initRecyclerView();
+        getArticlesFromInternet();
     }
 
-    private void getArticlesFromInternet(){
-        if(MyUtils.isInternetAvailable(this)){
-            new GetArticlesAPI().getArticle(this);
-            if(snackbar!=null)
-            snackbar.dismiss();
-        }
-        else{
+    // ONSTOP
+    @Override
+    protected void onStop() {
+        super.onStop();
+        MainPresenter.getInstance().detachScreen();
+    }
+
+    private void getArticlesFromInternet() {
+        if (mainPresenter.isInternetAvailable()) {
+
+            mainPresenter.getArticles();
+            if (snackbar != null)
+                snackbar.dismiss();
+        } else {
             swipeRefreshLayout.setRefreshing(false);
             snackbar = Snackbar
-                    .make(coordinatorLayout, "No internet connection!", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("RETRY", new View.OnClickListener() {
+                    .make(coordinatorLayout, R.string.main_snackbar_no_internet, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.main_snackbar_retry, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            // Retry to connect
+                            // Retry to get content from internet
                             getArticlesFromInternet();
                         }
                     });
@@ -79,26 +89,21 @@ public class MainActivity extends AppCompatActivity implements ArticleAsker {
     }
 
 
-
     private void initRecyclerView() {
-        ArticlesPOJO articlesData;
-
-        if(MyUtils.checkFirstRun(this))
-            articlesData = MyUtils.getDummyArticle();
-        else
-            articlesData = MyUtils.getLastArticles(this);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new ArticleAdapter(articlesData, this));
+        recyclerView.setAdapter(new ArticleAdapter(mainPresenter.getInitContent(), this));
+    }
 
+    //Share base context with LocalInteractor
+    public static Context getContextOfApplication() {
+        return context;
     }
 
     @Override
-    public void giveArticles(ArticlesPOJO articlesPOJO) {
-        recyclerView.setAdapter(new ArticleAdapter(articlesPOJO,this));
-        Toast.makeText(this,"Articles updated!",Toast.LENGTH_SHORT).show();
-        MyUtils.setLastArticles(articlesPOJO,this);
+    public void showArticles(ArticlesPOJO articlesPOJO) {
+        recyclerView.setAdapter(new ArticleAdapter(articlesPOJO, this));
         swipeRefreshLayout.setRefreshing(false);
+        Toast.makeText(this, R.string.main_articles_updated, Toast.LENGTH_SHORT).show();
     }
 }

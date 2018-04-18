@@ -1,8 +1,10 @@
-package com.bme.mdt72t.nytimesarticles.network;
+package com.bme.mdt72t.nytimesarticles.interactor;
 
 import android.util.Log;
 
 import com.bme.mdt72t.nytimesarticles.model.ArticlesPOJO;
+import com.bme.mdt72t.nytimesarticles.network.NYTimesArticleAPI;
+import com.bme.mdt72t.nytimesarticles.ui.main.MainScreen;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -10,13 +12,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class GetArticlesAPI {
+public class ArticlesInteractor {
 
-    private static final String TAG = "GetArticlesAPI";
+    private static final String TAG = "ArticlesInteractor";
 
     NYTimesArticleAPI service;
 
-    public GetArticlesAPI() {
+    public ArticlesInteractor() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(NYTimesArticleAPI.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -24,7 +26,7 @@ public class GetArticlesAPI {
         service = retrofit.create(NYTimesArticleAPI.class);
     }
 
-    public void getArticle(final ArticleAsker aa) {
+    public void getArticle(final MainScreen screen) {
 
         Call<ArticlesPOJO> call = service.loadCards("all-sections", "7");
         call.enqueue(new Callback<ArticlesPOJO>() {
@@ -32,7 +34,8 @@ public class GetArticlesAPI {
             @Override
             public void onResponse(Call<ArticlesPOJO> call, Response<ArticlesPOJO> response) {
                     ArticlesPOJO articlesPOJO  = response.body();
-                    aa.giveArticles(articlesPOJO);
+                    screen.showArticles(articlesPOJO);
+                LocalInteractor.setLastArticles(articlesPOJO);
             }
 
             @Override

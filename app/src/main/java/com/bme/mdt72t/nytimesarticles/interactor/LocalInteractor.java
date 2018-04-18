@@ -1,4 +1,4 @@
-package com.bme.mdt72t.nytimesarticles;
+package com.bme.mdt72t.nytimesarticles.interactor;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 
 import com.bme.mdt72t.nytimesarticles.model.ArticlesPOJO;
 import com.bme.mdt72t.nytimesarticles.model.Result;
+import com.bme.mdt72t.nytimesarticles.ui.main.MainActivity;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -13,13 +14,13 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class MyUtils {
-    public static boolean checkFirstRun(Context context) {
+public class LocalInteractor {
+
+    public static boolean checkFirstRun() {
+        Context context = MainActivity.getContextOfApplication();
         boolean isFirstRun = context.getSharedPreferences("run", MODE_PRIVATE)
                 .getBoolean("isFirstRun", true);
-        if (isFirstRun)
-            return true;
-        return false;
+        return isFirstRun;
     }
 
     public static ArticlesPOJO getDummyArticle() {
@@ -48,14 +49,16 @@ public class MyUtils {
         return articlesPOJO;
     }
 
-    public static ArticlesPOJO getLastArticles(Context context) {
+    public static ArticlesPOJO getLastArticles() {
+        Context context = MainActivity.getContextOfApplication();
         Gson gson = new Gson();
         String json = context.getSharedPreferences("articles", MODE_PRIVATE)
                 .getString("lastArticles", "error");
         return gson.fromJson(json, ArticlesPOJO.class);
     }
 
-    public static void setLastArticles(ArticlesPOJO articlesPOJO, Context context) {
+    public static void setLastArticles(ArticlesPOJO articlesPOJO) {
+        Context context = MainActivity.getContextOfApplication();
         Gson gson = new Gson();
         String json = gson.toJson(articlesPOJO);
         context.getSharedPreferences("articles", MODE_PRIVATE)
@@ -68,19 +71,15 @@ public class MyUtils {
                 .apply();
     }
 
-    public static boolean isInternetAvailable(Context context) {
-        NetworkInfo info = (NetworkInfo) ((ConnectivityManager)
+    public static boolean isInternetAvailable() {
+        Context context = MainActivity.getContextOfApplication();
+        NetworkInfo info = ((ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
 
         if (info == null) {
             return false;
         } else {
-            if (info.isConnected()) {
-                return true;
-            } else {
-                return false;
-            }
-
+            return info.isConnected();
         }
     }
 }
