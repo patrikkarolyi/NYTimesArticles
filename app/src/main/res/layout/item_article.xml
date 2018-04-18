@@ -31,7 +31,7 @@
             android:ellipsize="end"
             android:textColor="@color/black"
             android:maxLines="3"
-            android:layout_marginBottom="@dimen/article_text_gap"
+            android:layout_marginBottom="@dimen/item_text_gap"
             />
 
         <TextView
