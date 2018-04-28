@@ -16,16 +16,14 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class LocalInteractor {
 
-    public static boolean checkFirstRun() {
-        Context context = MainActivity.getContextOfApplication();
-        boolean isFirstRun = context.getSharedPreferences("run", MODE_PRIVATE)
+    public static boolean checkFirstRun(Context context) {
+        return context.getSharedPreferences("run", MODE_PRIVATE)
                 .getBoolean("isFirstRun", true);
-        return isFirstRun;
     }
 
     public static ArticlesPOJO getDummyArticle() {
         ArticlesPOJO articlesPOJO = new ArticlesPOJO();
-        List<Result> results = new ArrayList<Result>();
+        List<Result> results = new ArrayList<>();
 
         Result result1 = new Result();
         result1.setTitle("Ausztrál pingvinek a sivatagban !");
@@ -49,16 +47,14 @@ public class LocalInteractor {
         return articlesPOJO;
     }
 
-    public static ArticlesPOJO getLastArticles() {
-        Context context = MainActivity.getContextOfApplication();
+    public static ArticlesPOJO getLastArticles(Context context) {
         Gson gson = new Gson();
         String json = context.getSharedPreferences("articles", MODE_PRIVATE)
                 .getString("lastArticles", "error");
         return gson.fromJson(json, ArticlesPOJO.class);
     }
 
-    public static void setLastArticles(ArticlesPOJO articlesPOJO) {
-        Context context = MainActivity.getContextOfApplication();
+    public static void setLastArticles(ArticlesPOJO articlesPOJO,Context context) {
         Gson gson = new Gson();
         String json = gson.toJson(articlesPOJO);
         context.getSharedPreferences("articles", MODE_PRIVATE)
@@ -71,11 +67,9 @@ public class LocalInteractor {
                 .apply();
     }
 
-    public static boolean isInternetAvailable() {
-        Context context = MainActivity.getContextOfApplication();
+    public static boolean isInternetAvailable(Context context) {
         NetworkInfo info = ((ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-
         if (info == null) {
             return false;
         } else {

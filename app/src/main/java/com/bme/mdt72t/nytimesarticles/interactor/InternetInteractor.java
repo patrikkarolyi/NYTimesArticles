@@ -12,13 +12,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ArticlesInteractor {
+public class InternetInteractor {
 
-    private static final String TAG = "ArticlesInteractor";
+    private static final String TAG = "InternetInteractor";
 
     NYTimesArticleAPI service;
 
-    public ArticlesInteractor() {
+    public InternetInteractor() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(NYTimesArticleAPI.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -35,7 +35,6 @@ public class ArticlesInteractor {
             public void onResponse(Call<ArticlesPOJO> call, Response<ArticlesPOJO> response) {
                     ArticlesPOJO articlesPOJO  = response.body();
                     screen.showArticles(articlesPOJO);
-                LocalInteractor.setLastArticles(articlesPOJO);
             }
 
             @Override

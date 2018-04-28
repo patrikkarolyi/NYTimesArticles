@@ -1,8 +1,8 @@
 <resources>
 
     <string name="app_name">NYTimesArticles</string>
-    <string name="NY_Times_most_popular">NY Times most popular</string>
-    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra quis mi a mollis. Suspendisse dignissim lectus eget felis cursus aliquet. Curabitur tincidunt sed dolor a feugiat. Maecenas diam diam, euismod non est quis, vehicula gravida diam. In egestas nunc sed pharetra blandit. Phasellus nisi nibh, tristique ut urna sit amet, ultricies sodales libero. Duis ornare, nisi dapibus tristique tincidunt, lectus metus lacinia justo, ac cursus orci nisl et nibh. Vivamus at tincidunt ante, eu aliquam leo. Donec nec erat ex. Maecenas in magna et eros faucibus vestibulum. Curabitur efficitur tortor non quam dictum iaculis. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="NY_Times">NY Times</string>
+    <string name="none">NONE</string>
 
     <!-- Main -->
     <string name="main_articles_updated">Articles updated!</string>

@@ -1,11 +1,6 @@
 package com.bme.mdt72t.nytimesarticles.ui.adapter;
 
 import android.animation.ObjectAnimator;
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,37 +10,38 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bme.mdt72t.nytimesarticles.R;
-import com.bme.mdt72t.nytimesarticles.interactor.LocalInteractor;
 import com.bme.mdt72t.nytimesarticles.model.ArticlesPOJO;
 import com.bme.mdt72t.nytimesarticles.model.Result;
+import com.bme.mdt72t.nytimesarticles.ui.main.MainScreen;
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHolder> {
 
-    private Context context;
+    private MainScreen mainScreen;
     private ArticlesPOJO articlesPOJO;
 
+    public ArticleAdapter(MainScreen mainScreen) {
+        this.mainScreen = mainScreen;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.title)
         TextView title;
+        @BindView(R.id.byline)
         TextView byLine;
+        @BindView(R.id.img)
         CircleImageView cirlceImage;
+        @BindView(R.id.nextsign)
         ImageView nextSign;
 
         ViewHolder(View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.title);
-            byLine = itemView.findViewById(R.id.byline);
-            cirlceImage = itemView.findViewById(R.id.img);
-            nextSign = itemView.findViewById(R.id.nextsign);
+            ButterKnife.bind(this, itemView);
         }
-    }
-
-
-    public ArticleAdapter(ArticlesPOJO articlesPOJO, Context context) {
-        this.articlesPOJO = articlesPOJO;
-        this.context = context;
     }
 
 
@@ -63,10 +59,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ArticleAdapter.ViewHolder holder, int position) {
         final Result currentResult = articlesPOJO.getResults().get(position);
-        //hack for keeping the same TextView size
+
         String title = currentResult.getTitle();
-        if (title.length() < 50)
-            title += "                                                             ";
         holder.title.setText(title);
 
         String byLine = currentResult.getByline() + "  " + currentResult.getPublished_date();
@@ -79,26 +73,12 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         holder.nextSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (LocalInteractor.isInternetAvailable()) {
-                    try {
-                        // Strat Chrome
-                        Intent i = new Intent("android.intent.action.MAIN");
-                        i.setComponent(ComponentName.unflattenFromString(
-                                "com.android.chrome/com.android.chrome.Main"));
-                        i.addCategory("android.intent.category.LAUNCHER");
-                        i.setData(Uri.parse(currentResult.getUrl()));
-                        context.startActivity(i);
-                    } catch (ActivityNotFoundException e) {
-                        // Chrome is not installed
-                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(currentResult.getUrl()));
-                        context.startActivity(i);
-                    }
-                } else
-                    ObjectAnimator
-                            .ofFloat(v, "translationX",
-                                    0, 25, -25, 25, -25, 15, -15, 6, -6, 0)
-                            .setDuration(3000)
-                            .start();
+                if(!mainScreen.loadArticleUrl(currentResult.getUrl()))
+                ObjectAnimator
+                        .ofFloat(v, "translationX",
+                                0, 25, -25, 25, -25, 15, -15, 6, -6, 0)
+                        .setDuration(3000)
+                        .start();
             }
         });
     }
@@ -117,11 +97,15 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         return url;
     }
 
-
     @Override
     public int getItemCount() {
+        if(articlesPOJO == null)
+            return 0;
         return articlesPOJO.getResults().size();
     }
 
-
+    public void setContent(ArticlesPOJO articlesPOJO) {
+        this.articlesPOJO = articlesPOJO;
+        this.notifyDataSetChanged();
+    }
 }
