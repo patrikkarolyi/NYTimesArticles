@@ -1,4 +1,4 @@
-package com.bme.mdt72t.nytimesarticles.model;
+package com.bme.mdt72t.nytimesarticles.model.original;
 
 
 import com.google.gson.annotations.Expose;

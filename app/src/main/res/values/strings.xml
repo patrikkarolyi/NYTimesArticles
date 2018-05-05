@@ -6,6 +6,8 @@
 
     <!-- Main -->
     <string name="main_articles_updated">Articles updated!</string>
+    <string name="main_dialog_no_internet">A communications error occutted. Please check your connection.</string>
+    <string name="main_dialog_retry">RETRY</string>
     <string name="main_search">Search</string>
     <string name="main_snackbar_no_internet">No internet connection!</string>
     <string name="main_snackbar_retry">RETRY</string>

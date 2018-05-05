@@ -8,7 +8,14 @@
     <dimen name="item_img_margin">6dp</dimen>
     <dimen name="item_img_size">100dp</dimen>
     <dimen name="item_hei">150dp</dimen>
+    <dimen name="item_text_padding_left">120dp</dimen>
+    <dimen name="item_text_padding_right">40dp</dimen>
     <dimen name="item_nextsign_size">50dp</dimen>
     <dimen name="item_text_gap">8dp</dimen>
+    <dimen name="details_img_margin">30dp</dimen>
+    <dimen name="details_content_top_margin">30dp</dimen>
+    <dimen name="details_content_left_margin">30dp</dimen>
+    <dimen name="details_title_bottom_margin">30dp</dimen>
+    <dimen name="details_title_left_margin">30dp</dimen>
 
 </resources>

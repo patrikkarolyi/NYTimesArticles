@@ -2,7 +2,7 @@ package com.bme.mdt72t.nytimesarticles.network;
 
 
 
-import com.bme.mdt72t.nytimesarticles.model.ArticlesPOJO;
+import com.bme.mdt72t.nytimesarticles.model.original.JsonQueryPOJO;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -17,7 +17,7 @@ public interface NYTimesArticleAPI {
     //period = [1,7,30]
 
     @GET("{Section}/{Period}.json?api-key=" + ApiKey)
-    Call<ArticlesPOJO> loadCards(@Path("Section") String section,
-                                 @Path("Period") String period);
+    Call<JsonQueryPOJO> loadArticles(@Path("Section") String section,
+                                     @Path("Period") String period);
 
 }

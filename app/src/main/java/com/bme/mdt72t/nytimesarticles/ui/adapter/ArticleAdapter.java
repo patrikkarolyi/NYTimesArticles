@@ -7,13 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bme.mdt72t.nytimesarticles.R;
-import com.bme.mdt72t.nytimesarticles.model.ArticlesPOJO;
-import com.bme.mdt72t.nytimesarticles.model.Result;
+import com.bme.mdt72t.nytimesarticles.model.Article;
+import com.bme.mdt72t.nytimesarticles.model.original.JsonQueryPOJO;
+import com.bme.mdt72t.nytimesarticles.model.original.Result;
 import com.bme.mdt72t.nytimesarticles.ui.main.MainScreen;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,7 +27,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHolder> {
 
     private MainScreen mainScreen;
-    private ArticlesPOJO articlesPOJO;
+    private List<Article> articles;
 
     public ArticleAdapter(MainScreen mainScreen) {
         this.mainScreen = mainScreen;
@@ -37,6 +42,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         CircleImageView cirlceImage;
         @BindView(R.id.nextsign)
         ImageView nextSign;
+        @BindView(R.id.article_panel)
+        LinearLayout articlePanel;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -58,22 +65,22 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ArticleAdapter.ViewHolder holder, int position) {
-        final Result currentResult = articlesPOJO.getResults().get(position);
+        final Article currentArticle = articles.get(position);
 
-        String title = currentResult.getTitle();
+        String title = currentArticle.getTitle();
         holder.title.setText(title);
 
-        String byLine = currentResult.getByline() + "  " + currentResult.getPublished_date();
+        String byLine = currentArticle.getByline() + "  " + currentArticle.getPublished_date();
         holder.byLine.setText(byLine);
 
-        Picasso.get().load(getThumbnail(currentResult))
+        Picasso.get().load(currentArticle.getImgUrl())
                 .error(R.mipmap.ic_launcher_round)
                 .into(holder.cirlceImage);
 
         holder.nextSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!mainScreen.loadArticleUrl(currentResult.getUrl()))
+                if(!mainScreen.loadArticleUrl(currentArticle.getUrl()))
                 ObjectAnimator
                         .ofFloat(v, "translationX",
                                 0, 25, -25, 25, -25, 15, -15, 6, -6, 0)
@@ -81,31 +88,23 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
                         .start();
             }
         });
-    }
-
-
-    private String getThumbnail(Result currentResult) {
-        String url = null;
-        //check POJO for url step-by-step
-        if (currentResult.getMediaList() != null)
-            if (currentResult.getMediaList().get(0).getMetadata() != null)
-                if (currentResult.getMediaList().get(0).getMetadata().get(0).getUrl() != null)
-                    url = currentResult.getMediaList().get(0).getMetadata().get(0).getUrl();
-        if (url == null)
-            //if article has no image
-            url = "https://static01.nyt.com/images/2018/04/14/world/14syriaattack-span/14syriaattack-span-square320.jpg";
-        return url;
+        holder.articlePanel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainScreen.openDetailsActivity(currentArticle);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        if(articlesPOJO == null)
+        if(articles == null)
             return 0;
-        return articlesPOJO.getResults().size();
+        return articles.size();
     }
 
-    public void setContent(ArticlesPOJO articlesPOJO) {
-        this.articlesPOJO = articlesPOJO;
+    public void setContent(List<Article> articles) {
+        this.articles = articles;
         this.notifyDataSetChanged();
     }
 }

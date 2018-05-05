@@ -2,7 +2,8 @@ package com.bme.mdt72t.nytimesarticles.interactor;
 
 import android.util.Log;
 
-import com.bme.mdt72t.nytimesarticles.model.ArticlesPOJO;
+import com.bme.mdt72t.nytimesarticles.model.ArticleConverter;
+import com.bme.mdt72t.nytimesarticles.model.original.JsonQueryPOJO;
 import com.bme.mdt72t.nytimesarticles.network.NYTimesArticleAPI;
 import com.bme.mdt72t.nytimesarticles.ui.main.MainScreen;
 
@@ -28,17 +29,17 @@ public class InternetInteractor {
 
     public void getArticle(final MainScreen screen) {
 
-        Call<ArticlesPOJO> call = service.loadCards("all-sections", "7");
-        call.enqueue(new Callback<ArticlesPOJO>() {
+        Call<JsonQueryPOJO> call = service.loadArticles("all-sections", "7");
+        call.enqueue(new Callback<JsonQueryPOJO>() {
 
             @Override
-            public void onResponse(Call<ArticlesPOJO> call, Response<ArticlesPOJO> response) {
-                    ArticlesPOJO articlesPOJO  = response.body();
-                    screen.showArticles(articlesPOJO);
+            public void onResponse(Call<JsonQueryPOJO> call, Response<JsonQueryPOJO> response) {
+                    JsonQueryPOJO jsonQueryPOJO = response.body();
+                    screen.showArticles(new ArticleConverter().JsonToArticle(jsonQueryPOJO),true);
             }
 
             @Override
-            public void onFailure(Call<ArticlesPOJO> call, Throwable t) {
+            public void onFailure(Call<JsonQueryPOJO> call, Throwable t) {
                 Log.e(TAG, t.getMessage());
             }
         });

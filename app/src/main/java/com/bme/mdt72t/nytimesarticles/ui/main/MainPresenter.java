@@ -8,15 +8,24 @@ import android.net.Uri;
 
 import com.bme.mdt72t.nytimesarticles.interactor.InternetInteractor;
 import com.bme.mdt72t.nytimesarticles.interactor.LocalInteractor;
-import com.bme.mdt72t.nytimesarticles.model.ArticlesPOJO;
+import com.bme.mdt72t.nytimesarticles.model.Article;
+import com.bme.mdt72t.nytimesarticles.ui.DetailsActivity;
 import com.bme.mdt72t.nytimesarticles.ui.Presenter;
+import com.google.gson.Gson;
+
+import java.util.List;
 
 public class MainPresenter extends Presenter<MainScreen> {
 
     private Context context;
+    private LocalInteractor localInteractor;
+    private InternetInteractor internetInteractor;
 
     MainPresenter(Context context) {
         this.context = context;
+        localInteractor = new LocalInteractor(context);
+        internetInteractor = new InternetInteractor();
+
     }
 
     @Override
@@ -29,16 +38,19 @@ public class MainPresenter extends Presenter<MainScreen> {
         super.detachScreen();
     }
 
-    public ArticlesPOJO getInitContent() {
-        if (LocalInteractor.checkFirstRun(context))
-            return LocalInteractor.getDummyArticle();
+
+    public void getInitContent() {
+        if(localInteractor.checkFirstRun())
+            if(!localInteractor.isInternetAvailable())
+                screen.showNoConnectionDialogWindow();
         else
-            return LocalInteractor.getLastArticles(context);
+            localInteractor.getLastArticles(screen);
     }
 
+
     public void getArticlesFromInternet() {
-        if (LocalInteractor.isInternetAvailable(context)) {
-            new InternetInteractor().getArticle(screen);
+        if (localInteractor.isInternetAvailable()) {
+            internetInteractor.getArticle(screen);
             screen.hideSnackbar();
         } else {
             screen.hideSwipeRefreshLayout();
@@ -46,8 +58,9 @@ public class MainPresenter extends Presenter<MainScreen> {
         }
     }
 
+
     public boolean loadArticleUrl(String url) {
-        if (LocalInteractor.isInternetAvailable(context)) {
+        if (localInteractor.isInternetAvailable()) {
             try {
                 // Start Chrome
                 Intent i = new Intent("android.intent.action.MAIN");
@@ -62,12 +75,20 @@ public class MainPresenter extends Presenter<MainScreen> {
                 context.startActivity(i);
             }
             return true;
-        }
-        else
+        } else
             return false;
     }
 
-    public void setLastArticles(ArticlesPOJO articlesPOJO) {
-        LocalInteractor.setLastArticles(articlesPOJO,context);
+
+    public void setLastArticles(List<Article> articles) {
+        localInteractor.setLastArticles(articles);
+    }
+
+    public void openDetailsActivity(Article currentArticle) {
+        Intent i = new Intent(context, DetailsActivity.class);
+        Gson gson = new Gson();
+        i.putExtra("Article", gson.toJson(currentArticle));
+        context.startActivity(i);
+
     }
 }
