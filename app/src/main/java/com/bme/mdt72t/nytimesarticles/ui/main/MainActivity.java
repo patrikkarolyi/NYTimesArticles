@@ -10,11 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.bme.mdt72t.nytimesarticles.R;
 import com.bme.mdt72t.nytimesarticles.model.Article;
-import com.bme.mdt72t.nytimesarticles.ui.adapter.ArticleAdapter;
+import com.bme.mdt72t.nytimesarticles.ui.main.adapter.ArticleAdapter;
 
 import java.util.List;
 
@@ -40,12 +39,13 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        mainPresenter = new MainPresenter(this);
+        mainPresenter = new MainPresenter(getApplication(),this);
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
-                mainPresenter.getArticlesFromInternet();
+                mainPresenter.getContent();
             }
         });
     }
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
         super.onStart();
         mainPresenter.attachScreen(this);
         initRecyclerView();
-        mainPresenter.getArticlesFromInternet();
+        mainPresenter.getContent();
     }
 
     @Override
@@ -70,23 +70,27 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
         mainAdapter = new ArticleAdapter(this);
         mainAdapter.setContent(null);
         recyclerView.setAdapter(mainAdapter);
-        mainPresenter.getInitContent();
     }
 
     @Override
-    public void showArticles(List<Article> articles,boolean newContent) {
+    public void setArticles(List<Article> articles) {
         mainAdapter.setContent(articles);
-        //TODO android diffUtil
-        swipeRefreshLayout.setRefreshing(false);
-        mainPresenter.setLastArticles(articles);
-        if(newContent)
-        Toast.makeText(this, R.string.main_articles_updated, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void hideSnackbar() {
         if (snackbar != null)
             snackbar.dismiss();
+    }
+
+    @Override
+    public void showProgressBar() {
+
+    }
+
+    @Override
+    public void hideProgressBar() {
+
     }
 
     @Override
@@ -108,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
                 getText(R.string.main_dialog_retry),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mainPresenter.getInitContent();
+                        mainPresenter.getContent();
                     }
                 });
         dialogBuilder.create().show();
@@ -127,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
                     @Override
                     public void onClick(View view) {
                         // Retry to get content from internet
-                        mainPresenter.getArticlesFromInternet();
+                        mainPresenter.getContent();
                     }
                 });
         snackbar.show();

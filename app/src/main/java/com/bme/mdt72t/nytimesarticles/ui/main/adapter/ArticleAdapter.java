@@ -1,4 +1,4 @@
-package com.bme.mdt72t.nytimesarticles.ui.adapter;
+package com.bme.mdt72t.nytimesarticles.ui.main.adapter;
 
 import android.animation.ObjectAnimator;
 import android.support.annotation.NonNull;
@@ -12,12 +12,9 @@ import android.widget.TextView;
 
 import com.bme.mdt72t.nytimesarticles.R;
 import com.bme.mdt72t.nytimesarticles.model.Article;
-import com.bme.mdt72t.nytimesarticles.model.original.JsonQueryPOJO;
-import com.bme.mdt72t.nytimesarticles.model.original.Result;
 import com.bme.mdt72t.nytimesarticles.ui.main.MainScreen;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;

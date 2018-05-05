@@ -6,6 +6,7 @@ import com.bme.mdt72t.nytimesarticles.model.ArticleConverter;
 import com.bme.mdt72t.nytimesarticles.model.original.JsonQueryPOJO;
 import com.bme.mdt72t.nytimesarticles.network.NYTimesArticleAPI;
 import com.bme.mdt72t.nytimesarticles.ui.main.MainScreen;
+import com.bme.mdt72t.nytimesarticles.ui.main.PresenterInterface;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -13,13 +14,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class InternetInteractor {
+public class RESTHelper {
 
-    private static final String TAG = "InternetInteractor";
+    private static final String TAG = "RESTHelper";
 
     NYTimesArticleAPI service;
 
-    public InternetInteractor() {
+    public RESTHelper() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(NYTimesArticleAPI.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -27,7 +28,7 @@ public class InternetInteractor {
         service = retrofit.create(NYTimesArticleAPI.class);
     }
 
-    public void getArticle(final MainScreen screen) {
+    public void getArticle(final PresenterInterface presenter) {
 
         Call<JsonQueryPOJO> call = service.loadArticles("all-sections", "7");
         call.enqueue(new Callback<JsonQueryPOJO>() {
@@ -35,7 +36,10 @@ public class InternetInteractor {
             @Override
             public void onResponse(Call<JsonQueryPOJO> call, Response<JsonQueryPOJO> response) {
                     JsonQueryPOJO jsonQueryPOJO = response.body();
-                    screen.showArticles(new ArticleConverter().JsonToArticle(jsonQueryPOJO),true);
+                    if(presenter!=null)
+                    presenter.gotContent(new ArticleConverter().JsonToArticle(jsonQueryPOJO));
+                    else
+                        Log.e(TAG, "No reference to presenter!");
             }
 
             @Override

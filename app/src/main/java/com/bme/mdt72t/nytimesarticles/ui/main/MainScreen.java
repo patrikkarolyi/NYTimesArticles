@@ -5,11 +5,15 @@ import com.bme.mdt72t.nytimesarticles.model.Article;
 import java.util.List;
 
 public interface MainScreen {
-    void showArticles(List<Article> articles, boolean isNewContent);
+    void setArticles(List<Article> articles);
 
     void showSnackbar();
 
     void hideSnackbar();
+
+    void showProgressBar();
+
+    void hideProgressBar();
 
     void hideSwipeRefreshLayout();
 
