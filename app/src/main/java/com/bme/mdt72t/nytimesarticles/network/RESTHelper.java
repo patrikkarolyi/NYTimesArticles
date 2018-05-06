@@ -1,4 +1,4 @@
-package com.bme.mdt72t.nytimesarticles.interactor;
+package com.bme.mdt72t.nytimesarticles.network;
 
 import android.util.Log;
 

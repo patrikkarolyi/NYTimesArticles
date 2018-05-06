@@ -1,4 +1,4 @@
-package com.bme.mdt72t.nytimesarticles.interactor.repository;
+package com.bme.mdt72t.nytimesarticles.repository;
 
 import android.os.AsyncTask;
 import android.util.Log;

@@ -5,9 +5,10 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.bme.mdt72t.nytimesarticles.interactor.repository.ArticleRepository;
-import com.bme.mdt72t.nytimesarticles.interactor.repository.GetLocalArticlesTask;
-import com.bme.mdt72t.nytimesarticles.interactor.repository.SetLocalArticlesTask;
+import com.bme.mdt72t.nytimesarticles.network.RESTHelper;
+import com.bme.mdt72t.nytimesarticles.repository.ArticleRepository;
+import com.bme.mdt72t.nytimesarticles.repository.GetLocalArticlesTask;
+import com.bme.mdt72t.nytimesarticles.repository.SetLocalArticlesTask;
 import com.bme.mdt72t.nytimesarticles.model.Article;
 import com.bme.mdt72t.nytimesarticles.ui.main.PresenterInterface;
 

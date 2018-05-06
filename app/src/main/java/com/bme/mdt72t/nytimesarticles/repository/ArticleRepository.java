@@ -1,13 +1,10 @@
-package com.bme.mdt72t.nytimesarticles.interactor.repository;
+package com.bme.mdt72t.nytimesarticles.repository;
 
 import android.app.Application;
-import android.content.Context;
-import android.os.AsyncTask;
 
 import com.bme.mdt72t.nytimesarticles.model.Article;
 import com.bme.mdt72t.nytimesarticles.model.room.ArticleDao;
 import com.bme.mdt72t.nytimesarticles.model.room.ArticleDatabase;
-import com.bme.mdt72t.nytimesarticles.ui.main.MainScreen;
 
 import java.util.List;
 
@@ -21,11 +18,12 @@ public class ArticleRepository {
         articleDao = articleDatabase.articleDao();
     }
 
-    public List<Article> getAll() {
+    List<Article> getAll() {
         return articleDao.getAll();
     }
 
-    public void insert(List<Article> article) {
+    void setAll(List<Article> article) {
+        articleDao.deleteAll();
         articleDao.insertAll(article);
     }
 }

@@ -1,4 +1,4 @@
-package com.bme.mdt72t.nytimesarticles.interactor.repository;
+package com.bme.mdt72t.nytimesarticles.repository;
 
 import android.os.AsyncTask;
 
@@ -19,7 +19,7 @@ public class SetLocalArticlesTask extends AsyncTask {
 
     @Override
     protected Object doInBackground(Object[] objects) {
-        articleRepository.insert(articles);
+        articleRepository.setAll(articles);
         return null;
     }
 }
