@@ -23,14 +23,12 @@ public class GetLocalArticlesTask extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] objects) {
         articles = articleRepository.getAll();
-        Log.i(TAG, "DOINBACKGROUND");
         return null;
     }
 
     @Override
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
-        Log.i(TAG, "ONPOSTEXECUTE");
         if(presenter!=null)
             presenter.gotContent(articles);
         else

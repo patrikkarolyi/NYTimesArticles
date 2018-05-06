@@ -35,11 +35,11 @@ public class Interactor {
     }
 
     public void getLocalArticles(PresenterInterface presenter) {
-        new GetLocalArticlesTask(presenter,articleRepository);
+        new GetLocalArticlesTask(presenter,articleRepository).execute();
     }
 
     public void setLocalArticles(List<Article> articles) {
-        new SetLocalArticlesTask(articles,articleRepository);
+        new SetLocalArticlesTask(articles,articleRepository).execute();
         application.getSharedPreferences("run", MODE_PRIVATE)
                 .edit()
                 .putBoolean("isFirstRun", false)
@@ -53,10 +53,6 @@ public class Interactor {
     public boolean isInternetAvailable() {
         NetworkInfo info = ((ConnectivityManager)
                 application.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-        if (info == null) {
-            return false;
-        } else {
-            return info.isConnected();
-        }
+            return info != null && info.isConnected();
     }
 }
