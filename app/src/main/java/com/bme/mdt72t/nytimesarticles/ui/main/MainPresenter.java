@@ -82,7 +82,6 @@ public class MainPresenter extends Presenter<MainScreen> implements PresenterInt
     }
 
     public void gotContent(List<Article> articles) {
-        //TODO android diffUtil
         screen.setArticles(articles);
         screen.hideSwipeRefreshLayout();
         if(interactor.isInternetAvailable()){

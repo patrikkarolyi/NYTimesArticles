@@ -8,4 +8,6 @@ public interface DetailsScreen {
     void setDateTextView(String published_date);
 
     void setImageViewUrl(String imgUrl);
+
+    void setButtonViewUrl();
 }

@@ -3,6 +3,8 @@ package com.bme.mdt72t.nytimesarticles.ui.details;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,7 +24,8 @@ public class DetailsActivity extends AppCompatActivity implements DetailsScreen 
     ImageView imageView;
     @BindView(R.id.details_date)
     TextView dateTextView;
-
+    @BindView(R.id.details_button)
+    Button buttonView;
     private DetailsPresenter detailsPresenter;
 
     @Override
@@ -30,7 +33,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsScreen 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
-        detailsPresenter = new DetailsPresenter();
+        detailsPresenter = new DetailsPresenter(this);
     }
 
     @Override
@@ -67,6 +70,16 @@ public class DetailsActivity extends AppCompatActivity implements DetailsScreen 
         Picasso.get().load(imgUrl)
                 .error(R.mipmap.ic_launcher_round)
                 .into(imageView);
+    }
+
+    @Override
+    public void setButtonViewUrl() {
+        buttonView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detailsPresenter.loadUrl();
+            }
+        });
     }
 
 }

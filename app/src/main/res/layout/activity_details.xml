@@ -55,5 +55,17 @@
             android:textSize="16sp"
             android:fontFamily="monospace"/>
 
+        <Button
+            android:id="@+id/details_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/details_date"
+            android:layout_margin="20dp"
+            android:text="@string/read_the_full_article"
+            android:textSize="16sp"
+            android:fontFamily="monospace"/>
+
     </RelativeLayout>
 </ScrollView>

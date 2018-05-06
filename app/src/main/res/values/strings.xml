@@ -11,5 +11,6 @@
     <string name="main_search">Search</string>
     <string name="main_snackbar_no_internet">No internet connection!</string>
     <string name="main_snackbar_retry">RETRY</string>
+    <string name="read_the_full_article">Read the full article.</string>
 
 </resources>
