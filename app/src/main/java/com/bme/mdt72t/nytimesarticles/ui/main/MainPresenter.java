@@ -7,10 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.bme.mdt72t.nytimesarticles.interactor.RESTHelper;
 import com.bme.mdt72t.nytimesarticles.interactor.Interactor;
 import com.bme.mdt72t.nytimesarticles.model.Article;
-import com.bme.mdt72t.nytimesarticles.ui.DetailsActivity;
+import com.bme.mdt72t.nytimesarticles.ui.details.DetailsActivity;
 import com.bme.mdt72t.nytimesarticles.ui.Presenter;
 import com.google.gson.Gson;
 
@@ -66,14 +65,17 @@ public class MainPresenter extends Presenter<MainScreen> implements PresenterInt
     }
 
     public void getContent() {
+
         if (interactor.isInternetAvailable()) {
+            screen.showSwipeRefreshLayout();
             interactor.getRESTArticles(this);
         }
         else if(interactor.isFirstRun()){
-            screen.showNoConnectionDialogWindow();
             screen.hideSwipeRefreshLayout();
+            screen.showNoConnectionDialogWindow();
         }
         else {
+            screen.showSwipeRefreshLayout();
             screen.showSnackbar();
             interactor.getLocalArticles(this);
         }
@@ -83,7 +85,10 @@ public class MainPresenter extends Presenter<MainScreen> implements PresenterInt
         //TODO android diffUtil
         screen.setArticles(articles);
         screen.hideSwipeRefreshLayout();
-        if(interactor.isInternetAvailable());
-        interactor.setLocalArticles(articles);
+        if(interactor.isInternetAvailable()){
+            screen.hideSnackbar();
+            interactor.setLocalArticles(articles);
+        }
+
     }
 }

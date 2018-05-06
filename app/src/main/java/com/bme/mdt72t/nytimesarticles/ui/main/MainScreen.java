@@ -11,9 +11,7 @@ public interface MainScreen {
 
     void hideSnackbar();
 
-    void showProgressBar();
-
-    void hideProgressBar();
+    void showSwipeRefreshLayout();
 
     void hideSwipeRefreshLayout();
 

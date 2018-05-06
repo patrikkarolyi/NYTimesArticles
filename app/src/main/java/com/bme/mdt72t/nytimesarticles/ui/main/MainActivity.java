@@ -84,13 +84,8 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
     }
 
     @Override
-    public void showProgressBar() {
-
-    }
-
-    @Override
-    public void hideProgressBar() {
-
+    public void showSwipeRefreshLayout() {
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
